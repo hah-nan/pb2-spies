@@ -6,7 +6,7 @@ import ReactDOM from 'react-dom';
 class Message extends Component {
 
     formatTime(timestamp) {
-        var dt = new Date(timestamp / 10);
+        var dt = new Date(timestamp);
 
         var hours = dt.getHours();
         var minutes = dt.getMinutes();
@@ -23,7 +23,10 @@ class Message extends Component {
 
         return (
             <div className="message">
-                <strong></strong> {formattedTime} - {message.text}
+                <br />
+                <strong>{message.user}</strong>
+                <br />
+                {formattedTime} - {message.text}
             </div>
         )
 

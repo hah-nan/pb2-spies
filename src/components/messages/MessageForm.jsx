@@ -12,7 +12,8 @@ class MessageForm extends Component {
         // and propagated here
         this.props.emit('messageAdded', {
             timestamp: Date.now(),
-            text: this.refs.text.value.trim()
+            text: this.refs.text.value.trim(),
+            user: this.props.user.name
         });
 
         // Clear form

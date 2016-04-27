@@ -2,6 +2,9 @@
 import React, {Component} from 'react';
 import ReactDOM from 'react-dom';
 
+// Modules
+import io from 'socket.io-client';
+
 // Subcomponents
 import MessageList from './messages/MessageList.jsx';
 import MessageForm from './messages/MessageForm.jsx';
@@ -16,6 +19,18 @@ class App extends Component {
         this.state = {
 
         }
+    }
+
+    componentWillMount() {
+        this.socket = io('http://localhost:3000');
+        this.socket.on('connect', this.connect.bind(this));
+    }
+
+    connect() {
+        this.setState({
+            status: 'connected'
+        });
+        console.log('Connected: ' + this.socket.id);
     }
 
     render() {

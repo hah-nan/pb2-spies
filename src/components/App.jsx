@@ -19,7 +19,7 @@ class App extends Component {
         this.state = {
             status: 'disconnected',
             messages: [{
-                timeStamp: Date.now,
+                timeStamp: Date.now(),
                 text: "Welcome to SockChat!"
             }],
             users: [],

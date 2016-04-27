@@ -8,6 +8,19 @@ import Message from './Message.jsx';
 
 class MessageList extends Component {
 
+    getMessages() {
+        // initialize
+        var currentUser = '',
+            previousUser = '';
+
+        return this.props.messages.map((message, i) => {
+            currentUser = message.user;
+            message.isSameUser = currentUser == previousUser;
+            previousUser = currentUser;
+            return <Message message={message} key={i} />
+        })
+    }
+
     render() {
         return (
             <div className="well">
@@ -15,11 +28,7 @@ class MessageList extends Component {
                     <strong>Messages</strong>
                 </h3>
                 <hr />
-                {
-                    this.props.messages.map((message, i) => {
-                        return <Message message={message} key={i} />
-                    })
-                }
+                {this.getMessages()}
             </div>
         )
     }

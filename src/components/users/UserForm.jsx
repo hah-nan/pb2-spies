@@ -10,10 +10,7 @@ class UserForm extends Component {
 
         var name = this.refs.name.value.trim();
 
-        this.props.setUser({
-            name: name
-        });
-        this.props.emit('userJoined', {name: name});
+        this.props.emit('join', {name: name});
 
         // Clear
         this.refs.name.value = '';

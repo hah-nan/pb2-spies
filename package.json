@@ -14,9 +14,13 @@
     "webpack": "1.12.*"
   },
   "dependencies": {
-    "react": "^0.14.7",
-    "react-dom": "^0.14.7",
+    "cookie": "^0.3.1",
+    "cookie-parser": "^1.4.3",
     "express": "*",
+    "jsonwebtoken": "^7.4.1",
+    "react": "^0.14.7",
+    "react-cookie": "^0.4.7",
+    "react-dom": "^0.14.7",
     "socket.io": "*",
     "socket.io-client": "*"
   }

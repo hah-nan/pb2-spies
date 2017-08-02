@@ -11,7 +11,8 @@ const PORT_NUMBER = 3000;
 
 // Initialize states
 var connections = [],
-    users = [];
+    users = [],
+    messages = [];
 
 // App and server
 const app = express();
@@ -21,14 +22,31 @@ app.use(express.static('./public'));
 const server = app.listen(PORT_NUMBER);
 io = require('socket.io').listen(server);
 
-io.sockets.on('connection', function(socket) {
+const cookie = require('cookie')
 
+const jwt = require('jsonwebtoken')
+
+io.sockets.on('connection', function(socket) {
     // Disconnect handler (run once only)
+    var cookies = cookie.parse(socket.handshake.headers.cookie || '')
+    if(cookies.token){
+        var token = cookies.token
+        var oldUser = jwt.decode(token, 'secret');
+        oldUser.id = socket.id
+        users.push(oldUser);
+
+        console.log(oldUser.name)
+        console.log(users)
+        io.emit('userJoined', users);
+        socket.emit('joined', oldUser, token)
+    }
+
     socket.once('disconnect', function() {
 
         // Remove the current user
         for (var i = 0; i < users.length; i++) {
             user = users[i];
+            console.log(this.id)
             if (user.id == this.id) {
                 users.splice(i, 1);
                 console.log("User disconnected: " + user);
@@ -52,15 +70,19 @@ io.sockets.on('connection', function(socket) {
     });
 
     // Handler for adding users
-    socket.on('userJoined', function(payload) {
+    socket.on('join', function(payload) {
         var newUser = {
             id: this.id,
             name: payload.name
         };
 
-        users.push(newUser);
 
+        users.push(newUser);
+        var token = jwt.sign(newUser, 'secret');
+
+        socket.emit('joined', newUser, token)
         io.emit('userJoined', users);
+
         console.log('User Joined: ' + payload.name);
     });
 

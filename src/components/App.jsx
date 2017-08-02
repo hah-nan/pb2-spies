@@ -1,6 +1,7 @@
 // React
 import React, {Component} from 'react';
 import ReactDOM from 'react-dom';
+import cookie from 'react-cookie';
 
 // Modules
 import io from 'socket.io-client';
@@ -29,11 +30,13 @@ class App extends Component {
     }
 
     componentWillMount() {
-        this.socket = io('http://localhost:3000');
+        console.log(window.location.hostname)
+        this.socket = io('http://'+ window.location.hostname +':3000');
         this.socket.on('connect', this.connect.bind(this));
         this.socket.on('disconnect', this.disconnect.bind(this));
         this.socket.on('messageAdded', this.onMessageAdded.bind(this));
         this.socket.on('userJoined', this.onUserJoined.bind(this));
+        this.socket.on('joined', this.joined.bind(this));
     }
 
     connect() {
@@ -53,6 +56,7 @@ class App extends Component {
     }
 
     onUserJoined(users) {
+        
         this.setState({
             users: users
         });
@@ -66,6 +70,11 @@ class App extends Component {
 
     emit(eventName, payload) {
         this.socket.emit(eventName, payload);
+    }
+
+    joined(user, token){
+        this.setUser(user)
+        cookie.save('token', token, { path: '/' })
     }
 
     setUser(user) {
